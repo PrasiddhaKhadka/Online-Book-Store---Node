@@ -6,8 +6,15 @@ const ProductSchema = mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        minlength: 10,
+        minlength: 3,
         maxlength: 200,
+    },
+    slug:{
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim:true
     },
     quantity: {
         type: Number,
@@ -30,10 +37,10 @@ const ProductSchema = mongoose.Schema({
         minlength: 10,
         maxlength: 2000
     },
-    image: {
+    image: [{
         type: String,
         required: true
-    },
+    }],
     isDeleted:{
         type: Boolean,
         default: false
@@ -47,6 +54,10 @@ const ProductSchema = mongoose.Schema({
         timestamps: true
     }
 )
+
+ProductSchema.index({ name : 1 });
+ProductSchema.index({ slug : 1 });
+ProductSchema.index({ category : 1 });
 
 module.exports = mongoose.model("Product", ProductSchema);
 
