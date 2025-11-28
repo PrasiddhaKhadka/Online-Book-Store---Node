@@ -24,6 +24,11 @@ const AuthSchema = mongoose.Schema({
         required: [true, "Please provide a password"],
         minlength: 8,
     },
+    role:{
+        type:String,
+        enum:['admin','user'],
+        default:'user',
+    },
     isVerified:{
         type:Boolean,
         default:false
@@ -33,16 +38,12 @@ const AuthSchema = mongoose.Schema({
     timestamps: true
 })
 
-
 AuthSchema.pre('save',async function(){
     const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt)
+    this.password = await bcrypt.hash(this.password,salt)
 })
 
-AuthSchema.methods.createJwt=  function(){
-    return  jwt.sign({userId:this._id, name:this.name},process.env.JWT_SECRET,{expiresIn:'30d'})
-}
- 
+
 
 
 module.exports = mongoose.model("Auth", AuthSchema);

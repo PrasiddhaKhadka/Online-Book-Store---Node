@@ -1,21 +1,19 @@
 const { StatusCodes } = require('http-status-codes')
-const { BadRequest } = require("../errors")
+const CustomApiError = require('../errors/')
+const  {attachCookiesToResponse } = require('../utils/index')
 const Auth = require('../models/auth-model')
+const AuthSchema = require('../models/auth-model')
 
 const register = async(req,res)=>{
-    const user = await Auth.create(req.body)
-    if(!user){
-        throw BadRequest("Please enter name, email and password")
+    const { username, email, password} = req.body;
+    const emailExist = await AuthSchema.findOne({email})
+    if(emailExist){
+        throw new CustomApiError.BadRequestError("Email Already Exists")
     }
-    const token =  user.createJwt()
-    res.status(StatusCodes.CREATED).json({
-        msg: 'Success',
-        body:{
-            user:user,
-            token:token
-        }
-    }
-    )
+    
+    const user = await AuthSchema.create({username,email,password})
+    res.status(200).json({'hehehe':user})
+    
 }
 
 const login = async(req,res)=>{
