@@ -1,33 +1,28 @@
-const { StatusCodes } = require('http-status-codes')
+const User = require('../models/auth-model')
+const { StatusCodes }= require('http-status-codes')
 const CustomApiError = require('../errors/')
-const  {attachCookiesToResponse } = require('../utils/index')
-const Auth = require('../models/auth-model')
-const AuthSchema = require('../models/auth-model')
 
 const register = async(req,res)=>{
-    const { username, email, password} = req.body;
-    const emailExist = await AuthSchema.findOne({email})
+    const { username,email,password}= req.body;
+    if(!email || !username || !password){
+        throw new CustomApiError.BadRequest('Email, username or password missing')
+    }
+    const emailExist = await User.findOne({email:email})
+
     if(emailExist){
-        throw new CustomApiError.BadRequestError("Email Already Exists")
+        throw new CustomApiError.BadRequest('Email Already Exist')
     }
     
-    const user = await AuthSchema.create({username,email,password})
-    res.status(200).json({'hehehe':user})
-    
+
+    const user = await User.create({username,email,password})
+    res.status(StatusCodes.CREATED).json({msg:'Success',user:user})
 }
 
-const login = async(req,res)=>{
-    
-    const {email} = req.body
-    const user = await Auth.findOne({email:email})
-    if(!user){
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-    res.status(200).json({
-        msg:'Success',
-        body:user
-    })
+const login=async(req,res)=>{
+    res.status(200).json({msg:'Login'})
 }
 
-
-module.exports = { register, login }
+module.exports = {
+    register,
+    login
+}
