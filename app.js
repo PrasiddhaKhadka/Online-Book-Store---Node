@@ -4,16 +4,19 @@ const app = express()
 const notFound = require('./middlewares/not-found')
 const errorHandler = require('./middlewares/error-handler')
 const morgan = require('morgan')
+const cookieParser = require('cookie-parser')
 
 
 app.use(morgan('tiny'))
 app.use(express.json())
+app.use(cookieParser(process.env.JWT_SECRET))
 
 const PORT = process.env.PORT || 8000
 
 
 // TESTING THE BACKEND
 app.get('/',(req,res)=>{
+    console.log(req.signedCookies)
     res.status(200).json({msg:'Success',desc:'THE API IS SERVING'})
 }) 
 
