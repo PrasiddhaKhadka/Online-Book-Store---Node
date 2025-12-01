@@ -24,6 +24,10 @@ app.get('/',(req,res)=>{
 const authRouter = require('./routes/auth-routes')
 app.use('/api/v1/auth',authRouter)
 
+//USER ROUTER
+const userRouter = require('./routes/user-routes')
+app.use('/api/v1/users',userRouter)
+
 app.use(notFound)
 app.use(errorHandler)
 
