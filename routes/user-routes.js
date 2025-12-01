@@ -12,9 +12,9 @@ const { authenticactionMiddleware, authorizePermissions } = require('../middlewa
 
 router.get('/', authenticactionMiddleware, authorizePermissions('admin','owner'), getAllUsers)
 router.get('/showme',authenticactionMiddleware,showMe)
-router.get('/:id',getUserDetails)
-router.patch('/updateuser',updateUser)
-router.patch('/updateuserpassword',updateUserPassword)
-router.delete('/deleteUserAccount',deleteUserAccount)        
+router.get('/:id',authenticactionMiddleware, getUserDetails)
+router.patch('/updateuser',authenticactionMiddleware,updateUser)
+router.patch('/updateuserpassword',authenticactionMiddleware, updateUserPassword)
+router.delete('/deleteUserAccount',authenticactionMiddleware,deleteUserAccount)        
 
 module.exports = router
