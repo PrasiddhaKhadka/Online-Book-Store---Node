@@ -28,6 +28,10 @@ app.use('/api/v1/auth',authRouter)
 const userRouter = require('./routes/user-routes')
 app.use('/api/v1/users',userRouter)
 
+//PRODUCT ROUTER
+const productRouter = require('./routes/product-routes')
+app.use('/api/v1/products',productRouter)
+
 app.use(notFound)
 app.use(errorHandler)
 

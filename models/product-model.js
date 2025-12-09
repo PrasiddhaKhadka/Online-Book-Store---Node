@@ -1,63 +1,73 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-
-const ProductSchema = mongoose.Schema({
+const ProductSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 3,
-        maxlength: 200,
-    },
-    slug:{
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        trim:true
-    },
-    quantity: {
-        type: Number,
-        required: true,
-        min: 0
+      type: String,
+      trim: true,
+      required: [true, 'Please provide product name'],
+      maxlength: [100, 'Name can not be more than 100 characters'],
     },
     price: {
-        type: Number,
-        required: true,
-        min: 0
-    },
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
-        required: true
+      type: Number,
+      required: [true, 'Please provide product price'],
+      default: 0,
     },
     description: {
-        type: String,
-        required: true,
-        minlength: 10,
-        maxlength: 2000
+      type: String,
+      required: [true, 'Please provide product description'],
+      maxlength: [1000, 'Description can not be more than 1000 characters'],
     },
-    image: [{
-        type: String,
-        required: true
-    }],
-    isDeleted:{
-        type: Boolean,
-        default: false
+    image: {
+      type: String,
+      default: '/uploads/example.jpeg',
     },
-    date: {
-        type: Date,
-        default: Date.now
-    }
-},
-    {
-        timestamps: true
-    }
-)
+    category: {
+      type: String,
+      required: [true, 'Please provide product category'],
+      enum: ['office', 'kitchen', 'bedroom'],
+    },
+    company: {
+      type: String,
+      required: [true, 'Please provide company'],
+      enum: {
+        values: ['ikea', 'liddy', 'marcos'],
+        message: '{VALUE} is not supported',
+      },
+    },
+    colors: {
+      type: [String],
+      default: ['#222'],
+      required: true,
+    },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
+    freeShipping: {
+      type: Boolean,
+      default: false,
+    },
+    inventory: {
+      type: Number,
+      required: true,
+      default: 15,
+    },
+    averageRating: {
+      type: Number,
+      default: 0,
+    },
+    numOfReviews: {
+      type: Number,
+      default: 0,
+    },
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+  },
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
 
-ProductSchema.index({ name : 1 });
-ProductSchema.index({ slug : 1 });
-ProductSchema.index({ category : 1 });
-
-module.exports = mongoose.model("Product", ProductSchema);
-
+module.exports = mongoose.model('Product', ProductSchema);
