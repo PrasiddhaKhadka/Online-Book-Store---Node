@@ -8,7 +8,7 @@ const authorizationMiddleware=async(req,res,next)=>{
     }
     try {
        
-        const { username, userId, role } = isTokenValid({token}) 
+        const { username, userId, role } = isTokenValid(token) 
         req.user = {
             username: username,
             userId: userId,
@@ -16,7 +16,8 @@ const authorizationMiddleware=async(req,res,next)=>{
         }
         next()
     } catch (error) {
-        throw new CustomApiError.UnauthenticatedError('Authentication Invalid');
+        // console.log(error)
+        throw new CustomApiError.UnAuthorized('Authentication Invalid');
     }
    
 }
