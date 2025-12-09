@@ -32,6 +32,12 @@ app.use('/api/v1/users',userRouter)
 const productRouter = require('./routes/product-routes')
 app.use('/api/v1/products',productRouter)
 
+//REVIEW ROUTER
+const reviewRouter = require('./routes/review-routes')
+app.use('/api/v1/review',reviewRouter)
+
+
+
 app.use(notFound)
 app.use(errorHandler)
 
